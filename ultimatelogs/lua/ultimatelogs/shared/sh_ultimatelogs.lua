@@ -112,12 +112,6 @@ ULogs.CAMI.Refresh = function()
 	ULogs.CAMI.GetPlayersWithAccess( "ULogs.SeeIP", function( Players ) ULogs.CAMI.Privileges.SeeIP = Players end)
 	ULogs.CAMI.GetPlayersWithAccess( "ULogs.Delete", function( Players ) ULogs.CAMI.Privileges.Delete = Players end)
 	
-	if CLIENT then
-		MsgC( Color( 0, 255, 0 ), "\nRefreshed ULogs.CAMI privileges\n" )
-	else
-		print( "Refreshed ULogs.CAMI privileges" )
-	end
-	
 end
 
 -- I have to use a timer because a lot of admin addons call hooks before changing players ranks...
