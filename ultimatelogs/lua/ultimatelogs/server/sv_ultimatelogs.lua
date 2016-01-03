@@ -17,7 +17,7 @@
 
 
 ULogs = ULogs or {}
-ULogs.Version = "1.04"
+ULogs.Version = "1.05"
 
 util.AddNetworkString( "ULogs_OpenMenu" )
 util.AddNetworkString( "ULogs_Notify" )
@@ -267,7 +267,7 @@ ULogs.CanSee = function( Player )
 	
 	if !Player or !Player:IsValid() or !Player:IsPlayer() then return false end
 	
-	if ULogs.config.OnlyUseCustom or type( Player.IsUserGroup ) != "function" then -- If OnlyUseCustom or if ULX is not installed
+	if ULogs.config.OnlyUseCustom then -- If OnlyUseCustom
 		
 		if ULogs.config.CanSeeCustom( Player ) then return true end
 		
@@ -275,15 +275,7 @@ ULogs.CanSee = function( Player )
 	
 	end
 	
-	for k, v in pairs( ULogs.config.CanSee ) do
-		
-		if Player:IsUserGroup( v ) then
-			
-			return true
-			
-		end
-		
-	end
+	if table.HasValue( ULogs.CAMI.Privileges.See, Player ) then return true end
 	
 	return false
 	
@@ -293,23 +285,15 @@ ULogs.CanSeeIP = function( Player )
 	
 	if !Player or !Player:IsValid() or !Player:IsPlayer() then return false end
 	
-	if ULogs.config.OnlyUseCustom or type( Player.IsUserGroup ) != "function" then -- If OnlyUseCustom or if ULX is not installed
+	if ULogs.config.OnlyUseCustom then -- If OnlyUseCustom
 		
-		if ULogs.config.SeeIPCustom( Player ) then return true end
+		if ULogs.config.CanSeeCustom( Player ) then return true end
 		
 		return false
 	
 	end
 	
-	for k, v in pairs( ULogs.config.SeeIP ) do
-		
-		if Player:IsUserGroup( v ) then
-			
-			return true
-			
-		end
-		
-	end
+	if table.HasValue( ULogs.CAMI.Privileges.SeeIP, Player ) then return true end
 	
 	return false
 	
@@ -319,23 +303,15 @@ ULogs.CanDelete = function( Player )
 	
 	if !Player or !Player:IsValid() or !Player:IsPlayer() then return false end
 	
-	if ULogs.config.OnlyUseCustom or type( Player.IsUserGroup ) != "function" then -- If OnlyUseCustom or if ULX is not installed
+	if ULogs.config.OnlyUseCustom then -- If OnlyUseCustom
 		
-		if ULogs.config.DeleteCustom( Player ) then return true end
+		if ULogs.config.CanSeeCustom( Player ) then return true end
 		
 		return false
 	
 	end
 	
-	for k, v in pairs( ULogs.config.Delete ) do
-		
-		if Player:IsUserGroup( v ) then
-			
-			return true
-			
-		end
-		
-	end
+	if table.HasValue( ULogs.CAMI.Privileges.Delete, Player ) then return true end
 	
 	return false
 	

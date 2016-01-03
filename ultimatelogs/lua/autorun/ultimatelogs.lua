@@ -17,6 +17,7 @@
 
 
 include( "ultimatelogs/configuration.lua" )
+include( "ultimatelogs/shared/sh_cami.lua" )
 
 
 
@@ -37,6 +38,12 @@ if SERVER then
 		
 	end
 	
+	for k, v in pairs( file.Find( "ultimatelogs/shared/*.lua", "LUA" ) ) do
+		
+		AddCSLuaFile( "ultimatelogs/shared/" .. v )
+		
+	end
+	
 	
 else
 	
@@ -54,14 +61,7 @@ end
 
 
 
-for k, v in pairs( file.Find( "ultimatelogs/shared/*.lua", "LUA" ) ) do
-	
-	if SERVER then
-		AddCSLuaFile( "ultimatelogs/shared/" .. v )
-	end
-	include( "ultimatelogs/shared/" .. v )
-	
-end
+include( "ultimatelogs/shared/sh_ultimatelogs.lua" )
 for k, v in pairs( file.Find( "ultimatelogs/logtypes/*.lua", "LUA" ) ) do
 	
 	if SERVER then

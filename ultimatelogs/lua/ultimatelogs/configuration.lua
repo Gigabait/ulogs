@@ -34,24 +34,11 @@ ULogs.config.ConCommand     = "ulogs"                  -- Set the console comman
 ULogs.config.MaxLoadTime    = 5                        -- After how many seconds it will timeout if
                                                        -- no data is received
 
-ULogs.config.CanSee         = {                        -- ULX ranks that can open the logs menu
+ULogs.config.CanSee         = "admin"                  -- Min access rank that can open the logs menu
 
-"superadmin",
-"admin",
+ULogs.config.CanSeeIP       = "superadmin"             -- Min access rank that can see IP addresses
 
-}
-
-ULogs.config.SeeIP          = {                        -- ULX ranks that can see IP addresses
-
-"superadmin",
-
-}
-
-ULogs.config.Delete         = {                        -- ULX ranks that can delete logs
-
-"superadmin",
-
-}
+ULogs.config.CanDelete      = "superadmin"             -- Min access rank that can delete logs
 
 ULogs.config.IgnoreCommands = {                        -- Don't log these console commands
 
@@ -106,6 +93,7 @@ ULogs.config.IgnoreCommands = {                        -- Don't log these consol
 "vc_headlights_onoff",
 "vc_lights_onoff",
 "wire_pod_bind",
+"_fadmin",
 
 
 ULogs.config.ConCommand -- Don't log the command to open the logs menu. Please don't edit this line
@@ -166,9 +154,9 @@ ULogs.config.SaveToData      = true                    -- Set to 'true' if you w
 
 
 ULogs.config.OnlyUseCustom  = false                      -- Set this to 'true' if you want to use
-                                                         -- custom function instead of ULX
+                                                         -- custom function instead of CAMI ranks
 
-ULogs.config.CanSeeCustom   = function( Player )         -- If ULX is not installed or if 'OnlyUseCustom'
+ULogs.config.CanSeeCustom   = function( Player )         -- If 'OnlyUseCustom'
                                                          -- is set to 'true' then call this function to
 														 -- check if a player can see the logs menu
 
@@ -177,7 +165,7 @@ return Player:IsSuperAdmin() or Player:IsAdmin()         -- By default if the pl
 
 end
 
-ULogs.config.SeeIPCustom    = function( Player )         -- If ULX is not installed or if 'OnlyUseCustom'
+ULogs.config.SeeIPCustom    = function( Player )         -- If 'OnlyUseCustom'
                                                          -- is set to 'true' then call this function to
 														 -- check if a player can see IP addresses
 
@@ -186,7 +174,7 @@ return Player:IsSuperAdmin()                             -- By default only supe
 
 end
 
-ULogs.config.DeleteCustom   = function( Player )         -- If ULX is not installed or if 'OnlyUseCustom'
+ULogs.config.DeleteCustom   = function( Player )         -- If 'OnlyUseCustom'
                                                          -- is set to 'true' then call this function to
 														 -- check if a player can delete logs
 

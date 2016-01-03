@@ -17,8 +17,8 @@
 
 
 ULogs = ULogs or {}
-ULogs.LogTypes = {}
-ULogs.GMTypes = {}
+ULogs.LogTypes = ULogs.LogTypes or {}
+ULogs.GMTypes = ULogs.GMTypes or {}
 
 local Data = {}
 Data.ID = 1
@@ -75,6 +75,60 @@ ULogs.AddGMType = function( ID, Name )
 	ULogs.GMTypes[ ID ] = Data
 	
 end
+
+CAMI.RegisterPrivilege( { Name = "ULogs.See",    MinAccess = ULogs.config.CanSee or "admin" } )
+CAMI.RegisterPrivilege( { Name = "ULogs.SeeIP",  MinAccess = ULogs.config.CanSeeIP or "superadmin" } )
+CAMI.RegisterPrivilege( { Name = "ULogs.Delete", MinAccess = ULogs.config.CanDelete or "superadmin" } )
+
+ULogs.CAMI = {}
+ULogs.CAMI.Privileges = {}
+ULogs.CAMI.Privileges.See = {}
+ULogs.CAMI.Privileges.SeeIP = {}
+ULogs.CAMI.Privileges.Delete = {}
+
+ULogs.CAMI.GetPlayersWithAccess = function( privilegeName, callback )
+	
+	local allowedPlys = {}
+	local allPlys = player.GetAll()
+	
+	local function onResult( k, ply, hasAccess, _ )
+		
+		if hasAccess then table.insert(allowedPlys, ply) end
+		if k >= #allPlys then callback( allowedPlys ) end
+		
+	end
+	
+	for k, v in pairs( allPlys ) do
+		
+		CAMI.PlayerHasAccess( v, privilegeName, function( ... ) onResult( k, v, ... ) end, v )
+		
+	end
+	
+end
+
+ULogs.CAMI.Refresh = function()
+	
+	ULogs.CAMI.GetPlayersWithAccess( "ULogs.See", function( Players ) ULogs.CAMI.Privileges.See = Players end)
+	ULogs.CAMI.GetPlayersWithAccess( "ULogs.SeeIP", function( Players ) ULogs.CAMI.Privileges.SeeIP = Players end)
+	ULogs.CAMI.GetPlayersWithAccess( "ULogs.Delete", function( Players ) ULogs.CAMI.Privileges.Delete = Players end)
+	
+	if CLIENT then
+		MsgC( Color( 0, 255, 0 ), "\nRefreshed ULogs.CAMI privileges\n" )
+	else
+		print( "Refreshed ULogs.CAMI privileges" )
+	end
+	
+end
+
+-- I have to use a timer because a lot of admin addons call hooks before changing players ranks...
+hook.Add( "CAMI.OnUsergroupRegistered", "ULogs_CAMI_OnUsergroupRegistered", function() timer.Simple( 1, function() ULogs.CAMI.Refresh() end) end)
+hook.Add( "CAMI.OnUsergroupUnregistered", "ULogs_CAMI_OnUsergroupUnregistered", function() timer.Simple( 1, function() ULogs.CAMI.Refresh() end) end)
+hook.Add( "CAMI.PlayerUsergroupChanged", "ULogs_CAMI_PlayerUsergroupChanged", function() timer.Simple( 1, function() ULogs.CAMI.Refresh() end) end)
+hook.Add( "CAMI.SteamIDUsergroupChanged", "ULogs_CAMI_SteamIDUsergroupChanged", function() timer.Simple( 1, function() ULogs.CAMI.Refresh() end) end)
+hook.Add( "PlayerInitialSpawn", "ULogs_CAMI_PlayerInitialSpawn", function() timer.Simple( 1, function() ULogs.CAMI.Refresh() end) end)
+hook.Add( "UCLChanged", "ULogs_CAMI_UCLChanged", function() timer.Simple( 1, function() ULogs.CAMI.Refresh() end) end)
+timer.Create( "ULogs_CAMI_Refresh", 30, 0, function() ULogs.CAMI.Refresh() end)
+ULogs.CAMI.Refresh()
 
 
 
