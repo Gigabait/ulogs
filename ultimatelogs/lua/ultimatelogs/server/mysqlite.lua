@@ -23,13 +23,14 @@
         This loads the module (if necessary) and connects to the MySQL database (if set up).
         The config must have this layout:
             {
-                EnableMySQL      :: Bool - set to true to use MySQL, false for SQLite
+                EnableMySQL      :: Bool   - set to true to use MySQL, false for SQLite
                 Host             :: String - database hostname
                 Username         :: String - database username
                 Password         :: String - database password (keep away from clients!)
                 Database_name    :: String - name of the database
                 Database_port    :: Number - connection port (3306 by default)
                 Preferred_module :: String - Preferred module, case sensitive, must be either "mysqloo" or "tmysql4"
+                MultiStatements  :: Bool   - Only available in tmysql4: allow multiple SQL statements per query
             }
 
     ----------------------------- Utility functions -----------------------------
@@ -115,6 +116,8 @@ local mysqlOO
 local TMySQL
 local _G = _G
 
+local multistatements
+
 local MySQLite_config = MySQLite_config or RP_MySQLConfig or FPP_MySQLConfig
 local moduleLoaded
 
@@ -132,6 +135,7 @@ local function loadMySQLModule()
             moo and "mysqloo"                                  or
             "tmysql4")
 
+    multistatements = CLIENT_MULTI_STATEMENTS
 
     mysqlOO = mysqloo
     TMySQL = tmysql
@@ -151,12 +155,9 @@ function initialize(config)
     loadMySQLModule()
 
     if MySQLite_config.EnableMySQL then
-        timer.Simple(1, function()
-            connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
-        end)
+        connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
     else
         timer.Simple(0, function()
-            --GAMEMODE.DatabaseInitialized = GAMEMODE.DatabaseInitialized or function() end
             hook.Call("DatabaseInitialized")
         end)
     end
@@ -336,6 +337,8 @@ end
 msOOConnect = function(host, username, password, database_name, database_port)
     databaseObject = mysqlOO.connect(host, username, password, database_name, database_port)
 
+    if timer.Exists("darkrp_check_mysql_status") then timer.Remove("darkrp_check_mysql_status") end
+
     databaseObject.onConnectionFailed = function(_, msg)
         timer.Simple(5, function()
             msOOConnect(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
@@ -349,7 +352,7 @@ msOOConnect = function(host, username, password, database_name, database_port)
 end
 
 local function tmsqlConnect(host, username, password, database_name, database_port)
-    local db, err = TMySQL.initialize(host, username, password, database_name, database_port)
+    local db, err = TMySQL.initialize(host, username, password, database_name, database_port, nil, MySQLite_config.MultiStatements and multistatements or nil)
     if err then error("Connection failed! " .. err ..  "\n") end
 
     databaseObject = db

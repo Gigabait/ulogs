@@ -24,6 +24,8 @@ surface.CreateFont( "ULogs_Title",
 surface.CreateFont( "ULogs_Page",
 	{ font = "Arial", size = 16 } )
 
+local SearchDefaultText = "Search ALL Logs ..."
+
 ULogs.Block = {}
 ULogs.VersionAdvert = true
 
@@ -53,6 +55,7 @@ ULogs.Request = function( Mode, ID, Page, Option )
 	ULogs.RefreshCategory = true
 	
 	if !Mode or !ID or !Page then return end
+	if Option and string.Trim(Option) == SearchDefaultText then Mode = 1 Option = "" end
 	
 	net.Start( "ULogs_Request" )
 		net.WriteString( tostring( Mode ) )
@@ -318,7 +321,6 @@ ULogs.OpenMenu = function( Delete )
 		
 	end
 	
-	local SearchDefaultText = "Search ALL Logs ..."
 	local Search = vgui.Create( "ULogs_DTextEntry", Main )
 	Search:SetMultiline( false )
 	Search:SetPos( 3, Main:GetTall() - 28 )
@@ -326,12 +328,12 @@ ULogs.OpenMenu = function( Delete )
 	Search:SetText( SearchDefaultText )
 	Search:SetTextColor( Color( 255, 255, 255 ) )
 	Search.OnGetFocus = function()
-		if Search:GetValue() == SearchDefaultText then
+		if string.Trim(Search:GetValue()) == SearchDefaultText then
 			Search:SetText( "" )
 		end
 	end
 	Search.OnLoseFocus = function()
-		if Search:GetValue() == "" then
+		if string.Trim(Search:GetValue()) == "" then
 			Search:SetText( SearchDefaultText )
 		end
 	end
@@ -397,6 +399,7 @@ ULogs.OpenMenu = function( Delete )
 		local Option = nil
 		if Mode == 2 then Option = Search:GetValue() end
 		if Mode == 3 then Option = ChoosePlayer:GetValue() end
+		
 		ULogs.Request( Mode, SelectedButton, Page, Option )
 		
 	end
@@ -424,6 +427,10 @@ ULogs.OpenMenu = function( Delete )
 		if ULogs.RefreshCategory then
 			
 			ULogs.RefreshCategory = false
+			
+			if Mode == 2 and string.Trim(Search:GetValue()) == SearchDefaultText then
+				Mode = 1
+			end
 			
 			local Options = ""
 			if Mode == 2 then

@@ -78,8 +78,6 @@ hook.Add( "FAdmin_OnCommandExecuted", "ULogs_FAdmin_OnCommandExecuted", function
 		end
 	end
 	
-	PrintTable(Targets)
-	
 	ULogs.AddLog( INDEX, ULogs.PlayerInfo( Player ) .. " used FAdmin command '" .. Cmd .. "'" .. TargetsString,
 		ULogs.Register( INDEX, Cmd, Player, Targets ) )
 	

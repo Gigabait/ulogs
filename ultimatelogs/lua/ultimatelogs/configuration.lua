@@ -94,9 +94,17 @@ ULogs.config.IgnoreCommands = {                        -- Don't log these consol
 "vc_lights_onoff",
 "wire_pod_bind",
 "_fadmin",
+"cinema_video_request",
+"cinema_fullscreen_freeze",
 
 
 ULogs.config.ConCommand -- Don't log the command to open the logs menu. Please don't edit this line
+
+}
+
+ULogs.config.IgnoreTools = {                           -- Don't log these tools
+
+"colour",
 
 }
 
