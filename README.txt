@@ -20,6 +20,14 @@ Place the folder 'ultimatelogs' under '*/GarrysMod/addons/' .
 ***********************************************************************************************
 
 
+How to use :
+
+Visit https://facepunch.com/showthread.php?t=1498803
+
+
+***********************************************************************************************
+
+
 Configuration file :
 
 You can edit the configuration file under '*/GarrysMod/addons/ultimatelogs/lua/ultimatelogs/configuration.lua' ,
