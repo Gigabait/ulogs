@@ -108,7 +108,7 @@ ULogs.CheckUpdate = function( CurrentVersion )
 	
 	timer.Simple(.5, function()
 		
-		http.Fetch( "https://raw.githubusercontent.com/myrage2000/ulogs/master/VERSION", function( Body )
+		http.Fetch( "https://raw.githubusercontent.com/myrage2000/ulogs/garrysmods.org/VERSION", function( Body )
 			
 			Version = tonumber( Body )
 			
