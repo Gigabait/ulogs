@@ -14,7 +14,7 @@
 
 Installation :
 
-Place into '*/GarrysMod/addons/' .
+Place the folder 'ultimatelogs' under '*/GarrysMod/addons/' .
 
 
 ***********************************************************************************************
@@ -22,4 +22,5 @@ Place into '*/GarrysMod/addons/' .
 
 Configuration file :
 
-You can edit the configuration file under '*/GarrysMod/addons/ultimatelogs/lua/ultimatelogs/configuration.lua' .
+You can edit the configuration file under '*/GarrysMod/addons/ultimatelogs/lua/ultimatelogs/configuration.lua' ,
+                                          '*/GarrysMod/addons/ultimatelogs/lua/ultimatelogs/configurationMySQL.lua' .
