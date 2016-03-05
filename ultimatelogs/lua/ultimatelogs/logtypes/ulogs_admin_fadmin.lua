@@ -58,29 +58,33 @@ hook.Add( "FAdmin_OnCommandExecuted", "ULogs_FAdmin_OnCommandExecuted", function
 	if !Player or !Player:IsValid() or !Player:IsPlayer() then return end
 	if !Cmd then return end
 	local Targets = {}
-	for k, v in pairs( Res[ 2 ] ) do
+	
+	if Res and Res[ 2 ] and type(Res[ 2 ] ) == "table" then
 		
-		if v and v:IsValid() and v:IsPlayer() then
+		for k, v in pairs( Res[ 2 ] ) do
 			
-			table.insert( Targets, v )
+			if v and v:IsValid() and v:IsPlayer() then
+				
+				table.insert( Targets, v )
+				
+			end
 			
 		end
+		local TargetsString = ""
+		if #Targets > 1 then
+			TargetsString = " on multiple targets"
+		elseif #Targets == 1 and Targets[ 1 ] and Targets[ 1 ]:IsValid() and Targets[ 1 ]:IsPlayer() then
+			if Targets[ 1 ] == Player then
+				TargetsString = " on himself"
+			else
+				TargetsString = " on " .. ULogs.PlayerInfo( Targets[ 1 ] )
+			end
+		end
+		
+		ULogs.AddLog( INDEX, ULogs.PlayerInfo( Player ) .. " used FAdmin command '" .. Cmd .. "'" .. TargetsString,
+			ULogs.Register( INDEX, Cmd, Player, Targets ) )
 		
 	end
-	local TargetsString = ""
-	if #Targets > 1 then
-		TargetsString = " on multiple targets"
-	elseif #Targets == 1 and Targets[ 1 ] and Targets[ 1 ]:IsValid() and Targets[ 1 ]:IsPlayer() then
-		if Targets[ 1 ] == Player then
-			TargetsString = " on himself"
-		else
-			TargetsString = " on " .. ULogs.PlayerInfo( Targets[ 1 ] )
-		end
-	end
-	
-	ULogs.AddLog( INDEX, ULogs.PlayerInfo( Player ) .. " used FAdmin command '" .. Cmd .. "'" .. TargetsString,
-		ULogs.Register( INDEX, Cmd, Player, Targets ) )
-	
 end)
 
 
