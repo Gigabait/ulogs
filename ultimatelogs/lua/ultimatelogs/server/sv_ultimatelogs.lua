@@ -17,7 +17,7 @@
 
 
 ULogs = ULogs or {}
-ULogs.Version = "1.07"
+ULogs.Version = "1.08"
 
 util.AddNetworkString( "ULogs_OpenMenu" )
 util.AddNetworkString( "ULogs_Notify" )
@@ -386,7 +386,7 @@ hook.Add( "PlayerSay", "ULogs_OpenPlayerSay", function( Player, Str ) -- Logs me
 	if string.sub( string.lower( Str ), 1, string.len( ULogs.config.ChatCommand ) ) == ULogs.config.ChatCommand then
 		
 		ULogs.OpenMenu( Player )
-		return false
+		return ""
 		
 	end
 	
