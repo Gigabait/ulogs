@@ -17,7 +17,7 @@
 
 
 ULogs = ULogs or {}
-ULogs.Version = "1.08"
+ULogs.Version = "1.09"
 
 util.AddNetworkString( "ULogs_OpenMenu" )
 util.AddNetworkString( "ULogs_Notify" )
