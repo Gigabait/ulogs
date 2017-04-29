@@ -34,11 +34,24 @@ ULogs.config.ConCommand     = "ulogs"                  -- Set the console comman
 ULogs.config.MaxLoadTime    = 5                        -- After how many seconds it will timeout if
                                                        -- no data is received
 
-ULogs.config.CanSee         = "admin"                  -- Min access rank that can open the logs menu
+ULogs.config.CanSee         = {                        -- ULX ranks that can open the logs menu
 
-ULogs.config.CanSeeIP       = "superadmin"             -- Min access rank that can see IP addresses
+"superadmin",
+"admin",
 
-ULogs.config.CanDelete      = "superadmin"             -- Min access rank that can delete logs
+}
+
+ULogs.config.CanSeeIP          = {                     -- ULX ranks that can see IP addresses of other players
+
+"superadmin",
+
+}
+
+ULogs.config.CanDelete         = {                     -- ULX ranks that can delete logs
+
+"superadmin",
+
+}
 
 ULogs.config.IgnoreCommands = {                        -- Don't log these console commands
 

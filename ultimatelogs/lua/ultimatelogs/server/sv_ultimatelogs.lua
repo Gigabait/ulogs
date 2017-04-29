@@ -17,7 +17,7 @@
 
 
 ULogs = ULogs or {}
-ULogs.Version = "1.09"
+ULogs.Version = "1.10"
 
 util.AddNetworkString( "ULogs_OpenMenu" )
 util.AddNetworkString( "ULogs_Notify" )
@@ -40,7 +40,7 @@ util.AddNetworkString( "ULogs_DeleteOldest" )
 
 ULogs.Initialize = function()
 	MySQLite.initialize( ULogs.MySQLite_config )
-	--ULogs.MySQLite_config = nil -- Because it will never be used after here
+	--ULogs.MySQLite_config = nil -- Because it will never be used after here, can prevent some leaks ?
 end
 ULogs.Initialize()
 
@@ -63,12 +63,13 @@ ULogs.GetDate = function()
 	
 end
 
-ULogs.IsIP = function( Str ) -- Bad function for the moment to check if a string contains a ip
+ULogs.IsIP = function( Str )
 	
 	if !Str then return end
 	Str = Str:lower()
 	
-	if string.match( Str, "ip" ) then return true end
+	-- Thanks MexicanRaindeer
+	if string.match( Str, "[12]?%d%d?%.[12]?%d%d?%.[12]?%d%d?%.[12]?%d%d?" ) or string.match( Str, "ip" ) then return true end
 	
 	return false
 	
@@ -275,9 +276,21 @@ ULogs.CanSee = function( Player )
 	
 	end
 	
-	if table.HasValue( ULogs.CAMI.Privileges.See, Player ) then return true end
+	if type( Player.IsUserGroup ) == "function" then -- Yeaaaah, ULX is installed !
+		
+		for k, v in pairs( ULogs.config.CanSee ) do
+			
+			if Player:IsUserGroup( v ) then
+				
+				return true
+				
+			end
+			
+		end
+		
+	end
 	
-	return false
+	return Player:IsAdmin()
 	
 end
 
@@ -293,9 +306,21 @@ ULogs.CanSeeIP = function( Player )
 	
 	end
 	
-	if table.HasValue( ULogs.CAMI.Privileges.SeeIP, Player ) then return true end
+	if type( Player.IsUserGroup ) == "function" then -- Yeaaaah, ULX is installed !
+		
+		for k, v in pairs( ULogs.config.CanSeeIP ) do
+			
+			if Player:IsUserGroup( v ) then
+				
+				return true
+				
+			end
+			
+		end
+		
+	end
 	
-	return false
+	return Player:IsSuperAdmin()
 	
 end
 
@@ -311,9 +336,21 @@ ULogs.CanDelete = function( Player )
 	
 	end
 	
-	if table.HasValue( ULogs.CAMI.Privileges.Delete, Player ) then return true end
+	if type( Player.IsUserGroup ) == "function" then -- Yeaaaah, ULX is installed !
+		
+		for k, v in pairs( ULogs.config.CanDelete ) do
+			
+			if Player:IsUserGroup( v ) then
+				
+				return true
+				
+			end
+			
+		end
+		
+	end
 	
-	return false
+	return Player:IsSuperAdmin()
 	
 end
 

@@ -17,7 +17,6 @@
 
 
 include( "ultimatelogs/configuration.lua" )
-include( "ultimatelogs/shared/sh_cami.lua" )
 
 
 
